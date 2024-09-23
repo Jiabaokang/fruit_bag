@@ -32,6 +32,7 @@
 						v-for="(item, index) in 5"
 						:clickable="true"
 						:showArrow="true"
+						:to="`./list`"
 						:title="`第${index + 1}轮抽奖`"
 						note="一等奖 - 10人"
 						rightText="2024-9-23 16:37"

@@ -40,6 +40,13 @@
 				"style": {
 					"navigationBarTitleText": "开启抽奖"
 				}
+			},
+			{
+				"path" : "play/list",
+				"style" : 
+				{
+					"navigationBarTitleText" : "抽奖记录"
+				}
 			}
 		]
 	}],
