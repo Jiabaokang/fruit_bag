@@ -138,7 +138,7 @@
 				}
 			},
 			{
-				"path": "confirm/confirm",
+				"path": "play/confirm",
 				"style": {
 					"navigationBarTitleText": "扫码核销"
 				}
