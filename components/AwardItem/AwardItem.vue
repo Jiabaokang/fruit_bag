@@ -15,7 +15,9 @@
 					<view class="line">轮次：第三轮中奖</view>
 					<view class="line">时间：2024-07-30 12:00:00</view>
 					<view class="line">
-						<button type="primary" size="mini">手动核销</button>
+						<!-- <slot name="btnSlot"></slot> -->
+						<button @click="onWriteOff" type="primary" size="mini" v-if="writeOff">手动核销 </button>
+						<button @click="onGiveCode" type="primary" size="mini" v-if="code">兑换码 </button>
 					</view>
 				</view>
 			</view>
@@ -41,7 +43,14 @@
 			default:false
 		}
 	})
-	
+
+const onWriteOff = ()=>{
+	console.log('手动核销')
+}
+
+const onGiveCode = () =>{
+	console.log('兑换码')
+}
 	
 </script>
 

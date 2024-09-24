@@ -47,6 +47,20 @@
 				{
 					"navigationBarTitleText" : "抽奖记录"
 				}
+			},
+			{
+				"path" : "logs/logs",
+				"style" : 
+				{
+					"navigationBarTitleText" : "中奖记录"
+				}
+			},
+			{
+				"path" : "confirm/confirm",
+				"style" : 
+				{
+					"navigationBarTitleText" : "扫码核销"
+				}
 			}
 		]
 	}],

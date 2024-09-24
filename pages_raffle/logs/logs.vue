@@ -6,13 +6,10 @@
 			</template>
 			<view class="list">
 				<view class="row" v-for="item in dataList">
-					<AwardItem :writeOff="true">
-						
-					</AwardItem>
+					<AwardItem :code="true"></AwardItem>
 				</view>
 			</view>
 		</z-paging>
-		<uni-fab horizontal="right" vertical="bottom" :content="content" :pattern="{ icon: 'scan' }" @fabClick="scanCode" />
 	</view>
 </template>
 
@@ -23,18 +20,6 @@ const dataList = ref([]);
 const queryList = (pageNo, pageSize) => {
 	paging.value.complete([]);
 };
-
-const scanCode = () => {
-	uni.scanCode({
-		success: (res) => {
-			console.log(res);
-		},
-		fail: (err) => {
-			console.log(err);
-		}
-	})
-}
-
 </script>
 
 <style lang="scss" scoped>
