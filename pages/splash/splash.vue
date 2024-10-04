@@ -12,19 +12,34 @@
 </template>
 
 <script setup>
-	import { onMounted } from 'vue'
 	
-	onMounted(() => {
-		setTimeout(() => {
-			goIndex()
-		}, 2000)
+	import { onLoad,onReady } from '@dcloudio/uni-app';
+
+	
+	onReady(() => {
+		goIndex();
 	})
 	
 	const goIndex = ()=>{
-		uni.navigateTo({
-			url: '/pages/index/index'
-		})
+		//是否登录
+		let token = uni.getStorageSync('uni_id_token');
+		console.log(token);
+		if(token){
+			uni.switchTab({
+				url: '../index/index'
+			})
+		}else{
+			uni.navigateTo({
+				url: '/uni_modules/uni-id-pages/pages/login/login-withpwd'
+			});
+		}
 	}
+	
+	// function goLogin() {
+	// 	uni.navigateTo({
+	// 		url: '/uni_modules/uni-id-pages/pages/login/login-withpwd'
+	// 	});
+	// }
 </script>
 
 <style lang="scss" scoped>

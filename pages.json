@@ -12,7 +12,16 @@
 			"style": {
 				"navigationBarTitleText": "金地佳园"
 			}
-		}, {
+		}, 
+		
+		{
+			"path": "pages/mine/mine",
+			"style": {
+				"navigationBarTitleText": "个人中心",
+				"enablePullDownRefresh": false
+			}
+		},
+		{
 			"path": "uni_modules/uni-id-pages/pages/register/register",
 			"style": {
 				"navigationBarTitleText": "注册"
@@ -97,6 +106,13 @@
 				"enablePullDownRefresh": false,
 				"navigationBarTitleText": "实名认证"
 			}
+		},
+		{
+			"path" : "pages/add_frult_bag/add_frult_bag",
+			"style" : 
+			{
+				"navigationBarTitleText" : "添加果袋产品"
+			}
 		}
 	],
 	"subPackages": [{
@@ -159,5 +175,22 @@
 			"path": "", //启动页面，必选
 			"query": "" //启动参数，在页面的onLoad函数里面得到
 		}]
+	},
+	"tabBar": {
+		"color": "#888",
+		"selectedColor": "#0199FE",
+		"list": [{
+				"text": "首页",
+				"pagePath": "pages/index/index",
+				"iconPath": "static/home.png",
+				"selectedIconPath": "static/home-fill.png"
+			},
+			{
+				"text": "个人中心",
+				"pagePath": "pages/mine/mine",
+				"iconPath": "static/user.png",
+				"selectedIconPath": "static/user-fill.png"
+			}
+		]
 	}
 }

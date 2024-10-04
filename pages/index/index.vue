@@ -21,6 +21,7 @@
 
 <script>
 import { routerTo } from '../../utils/common.js'
+const db = uniCloud.database();
 export default {
 	onReady() {
 		this.point_card = uni.getStorageSync('point_card_key') || 0;
@@ -69,10 +70,25 @@ export default {
 	methods: {
 		onChange(swiper, index) {
 			this.point_card += index;
-			uni.showToast({
-				title: '当前 swiper 索引：' + index,
-				icon: 'none'
-			});
+			let {_id } = uni.getStorageSync('uni-id-pages-userInfo')
+			
+			db.collection("uni-id-scores").add({
+				user_id: _id,
+				score: 10,
+				type:1,
+				comment: '浏览增加积分',
+				balance:10
+			})
+			
+			.then(res=>{
+				uni.showToast({
+					title: `当前 swiper 索引：${index} 增加 10 积分`,
+					icon: 'none',
+				});
+			})
+			. catch(err=>{
+				console.log(err);
+			})
 		},
 		goToDetail() {
 			routerTo('/pages_raffle/detail/detail');
