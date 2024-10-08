@@ -1,0 +1,67 @@
+// 文档教程: https://uniapp.dcloud.net.cn/uniCloud/schema
+{
+	"bsonType": "object",
+	"required": ["title","picurl"],
+	"permission": {
+		"read": false,
+		"create": false,
+		"update": false,
+		"delete": false
+	},
+	"properties": {
+		"_id": {
+			"description": "ID，系统自动生成"
+		},
+		"title":{
+			"title": "名称",
+			"description": "请输入产品名称",
+			"bsonType": "string"
+		},	
+		"navid":{
+			"title": "分类",
+			"bsonType": "string",	
+			"foreignKey": "fruit-product-nav._id",
+			"enum": {
+				"collection": "fruit-product-nav",				
+				"field": "_id as value, classname as text"
+			}
+		},
+		"picurl":{
+			"title": "产品图",
+			"bsonType": "file"
+		},	
+		"orderid":{
+			"title": "排序",
+			"description": "请输入序号",
+			"bsonType": "int"
+		},
+		"price":{
+			"title": "价格",
+			"trim": "both",
+			"bsonType": "string",
+			"description": "如：2208/套"
+		},
+		"checked":{
+			"title": "状态",
+			"bsonType": "bool",
+			"defaultValue":true,
+			"description": "显示状态 默认true展示 false不展示",
+			"enum":[
+				{
+					"value":true,
+					"text":"显示"
+				},{
+					"value":false,
+					"text":"隐藏"
+				}
+			]
+		},
+		"createTime":{
+			"title": "创建时间",
+			"bsonType": "timestamp",
+			"forceDefaultValue":{
+				"$env": "now"
+			}
+		}
+	}
+}

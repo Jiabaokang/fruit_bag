@@ -15,7 +15,9 @@
 			<text style="size: 24px; color: red; font-weight: bolder">{{ point_card }}</text>
 		</view>
 
-		<button  @click="goToDetail">积分兑换奖品</button>
+		<button @click="goToDetail">积分兑换奖品</button>
+
+		<uni-fab horizontal="right" vertical="bottom" :pop-menu="false" @fabClick="addProduct"></uni-fab>
 	</view>
 </template>
 
@@ -26,7 +28,7 @@ export default {
 	onReady() {
 		this.point_card = uni.getStorageSync('point_card_key') || 0;
 	},
-	
+
 	onBackPress() {
 		console.log("页面关闭");
 		uni.setStorageSync('point_card_key', this.point_card);
@@ -71,7 +73,7 @@ export default {
 		onChange(swiper, index) {
 			this.point_card += index;
 			let {_id } = uni.getStorageSync('uni-id-pages-userInfo')
-			
+
 			db.collection("uni-id-scores").add({
 				user_id: _id,
 				score: 10,
@@ -79,7 +81,7 @@ export default {
 				comment: '浏览增加积分',
 				balance:10
 			})
-			
+
 			.then(res=>{
 				uni.showToast({
 					title: `当前 swiper 索引：${index} 增加 10 积分`,
@@ -92,7 +94,16 @@ export default {
 		},
 		goToDetail() {
 			routerTo('/pages_raffle/detail/detail');
-		}
+		},
+		addProduct() {
+			routerTo('/pages/fruit-product-nav/list');
+		},
+		// addProduct(){
+		// 	uni.navigateTo({
+		// 		url:'/pages/fruit-product-nav/list'
+		// 	})
+		// 	//routerTo('/pages/fruit-product-nav/list);
+		// }
 	}
 };
 </script>

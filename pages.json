@@ -12,8 +12,8 @@
 			"style": {
 				"navigationBarTitleText": "金地佳园"
 			}
-		}, 
-		
+		},
+
 		{
 			"path": "pages/mine/mine",
 			"style": {
@@ -108,10 +108,49 @@
 			}
 		},
 		{
-			"path" : "pages/add_frult_bag/add_frult_bag",
-			"style" : 
-			{
-				"navigationBarTitleText" : "添加果袋产品"
+			"path": "pages/add_frult_bag/add_frult_bag",
+			"style": {
+				"navigationBarTitleText": "添加果袋产品"
+			}
+		}, {
+			"path": "pages/fruit-product-nav/add",
+			"style": {
+				"navigationBarTitleText": "新增分类"
+			}
+		}, {
+			"path": "pages/fruit-product-nav/edit",
+			"style": {
+				"navigationBarTitleText": "编辑分类"
+			}
+		}, {
+			"path": "pages/fruit-product-nav/list",
+			"style": {
+				"navigationBarTitleText": "分类列表"
+			}
+		}, {
+			"path": "pages/fruit-product-nav/detail",
+			"style": {
+				"navigationBarTitleText": "分类详情"
+			}
+		}, {
+			"path": "pages/fruit-product-list/add",
+			"style": {
+				"navigationBarTitleText": "新增"
+			}
+		}, {
+			"path": "pages/fruit-product-list/edit",
+			"style": {
+				"navigationBarTitleText": "编辑"
+			}
+		}, {
+			"path": "pages/fruit-product-list/list",
+			"style": {
+				"navigationBarTitleText": "列表"
+			}
+		}, {
+			"path": "pages/fruit-product-list/detail",
+			"style": {
+				"navigationBarTitleText": "详情"
 			}
 		}
 	],

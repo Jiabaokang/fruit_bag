@@ -45,6 +45,7 @@
 				</view>
 			</view>
 			<view class="list">
+				
 				<view class="group">
 					<view class="item" @click="myArticle">
 						<view class="left">
@@ -60,6 +61,7 @@
 						</view>
 						<view class="right"><text class="iconfont icon-a-10-you"></text></view>
 					</view>
+					
 					<view class="item">
 						<view class="left">
 							<text class="iconfont icon-a-21-xiugai"></text>
