@@ -1,0 +1,9 @@
+{
+  "name": "fruit-api-product",
+  "dependencies": {
+    "fruit-utils": "file:../common/fruit-utils"
+  },
+  "extensions": {
+    "uni-cloud-jql": {}
+  }
+}

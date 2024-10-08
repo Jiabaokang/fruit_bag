@@ -1,5 +1,11 @@
 <template>
 	<view class="mine">
+		<!-- <view class="main" :style="{ paddingTop: getStatusBarHeight() + 'px' }">
+			<view class="titleBar" :style="{ height: getTitleBarHeight() + 'px' }">
+				
+				
+			</view>
+		</view> -->
 		<view class="top">
 			<view class="group" @click="goUserInfo">
 				<view class="userinfo">
@@ -30,7 +36,7 @@
 		</view>
 
 		<view class="main">
-			<view class="info">
+			<!-- <view class="info">
 				<view class="item">
 					<text>33</text>
 					获赞
@@ -43,29 +49,52 @@
 					<text>3</text>
 					发文
 				</view>
-			</view>
+			</view> -->
 			<view class="list">
-				
-				<view class="group">
-					<view class="item" @click="myArticle">
+				<view class="group" v-if="uniIDHasRole('admin')">
+					<view class="item" @click="onClassicesManage">
 						<view class="left">
 							<text class="iconfont icon-a-24-bianji"></text>
-							<text class="text">我的长文</text>
+							<text class="text">分类管理</text>
 						</view>
 						<view class="right"><text class="iconfont icon-a-10-you"></text></view>
 					</view>
-					<view class="item" @click="myLike">
+					<view class="item" @click="onProductManage">
 						<view class="left">
 							<text class="iconfont icon-a-106-xihuan"></text>
-							<text class="text">我的点赞</text>
+							<text class="text">产品管理</text>
 						</view>
 						<view class="right"><text class="iconfont icon-a-10-you"></text></view>
 					</view>
-					
-					<view class="item">
+
+					<!-- <view class="item">
 						<view class="left">
 							<text class="iconfont icon-a-21-xiugai"></text>
 							<text class="text">评论过的</text>
+						</view>
+						<view class="right"><text class="iconfont icon-a-10-you"></text></view>
+					</view> -->
+				</view>
+
+				<view class="group">
+					<view class="item" @click="onViewsHostory">
+						<view class="left">
+							<text class="iconfont icon-a-24-bianji"></text>
+							<text class="text">浏览记录</text>
+						</view>
+						<view class="right"><text class="iconfont icon-a-10-you"></text></view>
+					</view>
+					<view class="item" @click="onMyScore">
+						<view class="left">
+							<text class="iconfont icon-a-106-xihuan"></text>
+							<text class="text">我的积分</text>
+						</view>
+						<view class="right"><text class="iconfont icon-a-10-you"></text></view>
+					</view>
+					<view class="item" @click="toJoinRaffle">
+						<view class="left">
+							<text class="iconfont icon-a-106-xihuan"></text>
+							<text class="text">积分抽奖</text>
 						</view>
 						<view class="right"><text class="iconfont icon-a-10-you"></text></view>
 					</view>
@@ -103,16 +132,17 @@
 </template>
 
 <script>
-import { store,mutations } from '@/uni_modules/uni-id-pages/common/store.js';
+import { store, mutations } from '@/uni_modules/uni-id-pages/common/store.js';
+import { routerTo } from '../../utils/common.js';
+import { getStatusBarHeight, getTitleBarHeight } from '@/utils/system.js';
 export default {
 	data() {
-		return {
-			
-		};
+		return {};
 	},
 	onLoad() {},
 	computed: {
 		userInfo() {
+			console.log(store.userInfo);
 			return store.userInfo;
 		},
 		hasLogin() {
@@ -121,62 +151,89 @@ export default {
 	},
 	methods: {
 		//意见反馈
-		goFeedback(){
-			if(this.goLoginPage()) return;
+		goFeedback() {
+			if (this.goLoginPage()) return;
 			uni.navigateTo({
-				url:"/uni_modules/uni-feedback/pages/opendb-feedback/opendb-feedback"
-			})
+				url: '/uni_modules/uni-feedback/pages/opendb-feedback/opendb-feedback'
+			});
 		},
-		myLike(){
-			if(this.goLoginPage()) return;
+		//浏览记录
+		onViewsHostory() {
 			uni.navigateTo({
-				url:"/pages/circle-like/list"
-			})
+				url: '/pages/views-history/list'
+			});
 		},
-		myArticle(){
-			if(this.goLoginPage()) return;
+		//我的积分
+		onMyScore() {
 			uni.navigateTo({
-				url:"/pages/circle-article/list"
-			})
+				url: '/pages/uni-id-scores/list'
+			});
 		},
-		goUserInfo(){
+		//参加积分抽奖
+		toJoinRaffle() {
+			routerTo('/pages_raffle/detail/detail');
+		},
+		//分类管理
+		onClassicesManage() {
+			uni.navigateTo({
+				url: '/pages/fruit-product-nav/list'
+			});
+		},
+		//产品管理
+		onProductManage() {
+			uni.navigateTo({
+				url: '/pages/fruit-product-list/list'
+			});
+		},
+		myLike() {
+			if (this.goLoginPage()) return;
+			uni.navigateTo({
+				url: '/pages/circle-like/list'
+			});
+		},
+		myArticle() {
+			if (this.goLoginPage()) return;
+			uni.navigateTo({
+				url: '/pages/circle-article/list'
+			});
+		},
+		goUserInfo() {
 			console.log(store);
-			
-			if(this.hasLogin){
+
+			if (this.hasLogin) {
 				uni.navigateTo({
-					url:"/uni_modules/uni-id-pages/pages/userinfo/userinfo"
-				})
-			}else{
+					url: '/uni_modules/uni-id-pages/pages/userinfo/userinfo'
+				});
+			} else {
 				//获取路由路径
-				let route = this.$mp.page.route
+				let route = this.$mp.page.route;
 				uni.navigateTo({
-					url:"/uni_modules/uni-id-pages/pages/userinfo/userinfo?uniIdRedirectUrl=/"+route
-				})
+					url: '/uni_modules/uni-id-pages/pages/userinfo/userinfo?uniIdRedirectUrl=/' + route
+				});
 			}
-			
 		},
-		
-		logout(){
-			if(this.goLoginPage()) return;
+
+		logout() {
+			if (this.goLoginPage()) return;
 			uni.showModal({
-				title:"是否确认退出？",
+				title: '是否确认退出？',
 				success: (res) => {
-					if(res.confirm){
+					if (res.confirm) {
 						mutations.logout();
 					}
 				}
-			})
+			});
 		},
-		
-		goLoginPage(){
-			if(!this.hasLogin){
+
+		goLoginPage() {
+			if (!this.hasLogin) {
 				uni.showToast({
-					title:"你没登录呀～～",
-					icon:"none"
-				})
-				return true
+					title: '你没登录呀～～',
+					icon: 'none'
+				});
+				return true;
 			}
-			return false
+			return false;
 		}
 	}
 };
@@ -185,7 +242,7 @@ export default {
 <style lang="scss" scoped>
 .mine {
 	.top {
-		height: 300rpx;
+		height: 320rpx;
 		background: #bbb;
 		padding: 0 30rpx;
 		padding-top: var(--status-bar-height);

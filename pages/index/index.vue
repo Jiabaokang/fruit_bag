@@ -1,36 +1,47 @@
 <template>
+	<uni-notice-bar :text="`1、浏览果袋列表,查看果袋详情可增加积分0.5积分;\n2、分享此页面给微信好友或者朋友圈可增加10积分;`" />
 	<view class="swiper-container">
 		<view>
-			<z-swiper v-model="images" :options="optionsRotateNumber" @slideChange="onChange">
-				<z-swiper-item :custom-style="slideCustomStyle" v-for="(item, index) in images" :key="index">
+			<z-swiper v-model="productList" :options="optionsRotateNumber" @slideChange="onChange" @slideClick="goDetail">
+				<z-swiper-item :custom-style="slideCustomStyle" v-for="(item, index) in productList" :key="item._id">
 					<view :style="itemCustomStyle">
-						<image class="slide-image" :src="item.src" mode="aspectFill"></image>
+						<image class="slide-image" :src="item.picUrl" mode="aspectFill"></image>
 					</view>
 				</z-swiper-item>
 			</z-swiper>
+			
+			<view  class="info" v-if="productList.length > 0">
+				<view class="list-item">{{"名称："+productList[currentIndex].title}}</view>
+				<view class="list-item">{{"价格："+productList[currentIndex].price}}</view>
+				<view class="list-item">
+					<view class="">
+						本次积分：
+					</view>
+					<view class="number">
+						+0.5
+					</view>
+				</view>
+			</view>
+			
 		</view>
-
-		<view class="count">
-			浏览增加积分：
-			<text style="size: 24px; color: red; font-weight: bolder">{{ point_card }}</text>
-		</view>
-
-		<button @click="goToDetail">积分兑换奖品</button>
-
-		<uni-fab horizontal="right" vertical="bottom" :pop-menu="false" @fabClick="addProduct"></uni-fab>
+		
 	</view>
 </template>
 
 <script>
-import { routerTo } from '../../utils/common.js'
+import { routerTo } from '../../utils/common.js';
 const db = uniCloud.database();
+//引入云对象
+const dbFruitScore = uniCloud.importObject("fruit_score");
+const dbFruitList = uniCloud.importObject("fruit-api-product");
 export default {
 	onReady() {
 		this.point_card = uni.getStorageSync('point_card_key') || 0;
+		this.getFruitList();
 	},
 
 	onBackPress() {
-		console.log("页面关闭");
+		console.log('页面关闭');
 		uni.setStorageSync('point_card_key', this.point_card);
 	},
 
@@ -41,7 +52,10 @@ export default {
 				effect: 'cards',
 				cardsEffect: {
 					perSlideRotate: 15
-				}
+				},
+				loop: true,
+				loopedSlides: 2,
+				
 			},
 			slideCustomStyle: {
 				display: 'flex',
@@ -50,8 +64,8 @@ export default {
 			},
 			itemCustomStyle: {
 				overflow: 'hidden',
-				height: '640rpx',
-				width: '480rpx',
+				height: '720rpx',
+				width: '560rpx',
 				'border-width': '12rpx',
 				'border-color': '#4fc08d',
 				'border-style': 'solid',
@@ -60,50 +74,32 @@ export default {
 			startX: 0,
 			moveX: 0,
 			currentIndex: 0,
-			images: [
-				{ src: '../../static/image1.jpg', removed: false },
-				{ src: '../../static/image3.jpeg', removed: false },
-				{ src: '../../static/image4.jpeg', removed: false },
-				{ src: '../../static/image5.jpg', removed: false }
-				// 添加更多图片
-			]
+			productList: []
 		};
 	},
 	methods: {
 		onChange(swiper, index) {
+			this.currentIndex = index;
 			this.point_card += index;
-			let {_id } = uni.getStorageSync('uni-id-pages-userInfo')
-
-			db.collection("uni-id-scores").add({
-				user_id: _id,
-				score: 10,
-				type:1,
-				comment: '浏览增加积分',
-				balance:10
-			})
-
-			.then(res=>{
-				uni.showToast({
-					title: `当前 swiper 索引：${index} 增加 10 积分`,
-					icon: 'none',
-				});
-			})
-			. catch(err=>{
-				console.log(err);
+			let { _id } = uni.getStorageSync('uni-id-pages-userInfo');
+			console.log("swiper="+swiper+"index="+index);
+			dbFruitScore.addScore().then(res=>{
+				console.log(res);
 			})
 		},
-		goToDetail() {
-			routerTo('/pages_raffle/detail/detail');
+		getFruitList(){
+			dbFruitList.getProductList().then(res=>{
+				console.log(res);
+				this.productList = res.data;
+			})
 		},
-		addProduct() {
-			routerTo('/pages/fruit-product-nav/list');
-		},
-		// addProduct(){
-		// 	uni.navigateTo({
-		// 		url:'/pages/fruit-product-nav/list'
-		// 	})
-		// 	//routerTo('/pages/fruit-product-nav/list);
-		// }
+		goDetail(e){	
+			let {clickedIndex} = e;
+			let item = this.productList[clickedIndex];
+			console.log(item);
+			routerTo(`/pages/fruit-product-list/detail?id=${item._id}`);
+		}
+	
 	}
 };
 </script>
@@ -115,15 +111,43 @@ export default {
 	height: 100vh;
 	width: 100vw;
 }
-.count {
-	margin-top: 90rpx;
-	text-align: center;
+
+.info{
+	margin-top: 120rpx;
 	font-size: 36rpx;
 	color: #666;
+	display: flex;
+	flex-direction: column;
+	align-items: self-start;
+	justify-content: center;
+	font-weight: bolder;
+}
+.list-item{
+	margin-top: 20rpx;
+	display: flex;
+	align-items: center;
+	justify-content: center;
 }
 
+.number{
+	font-size: 48rpx;
+	font-weight: bolder;
+	color: orangered;
+	animation: fadeInOut 2s ease-in-out infinite;
+}
 .slide-image {
 	width: 100%;
 	height: 100%;
+}
+@keyframes fadeInOut {
+  0% {
+    opacity: 0;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
 }
 </style>

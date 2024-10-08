@@ -1,14 +1,15 @@
 {
-  "id": "uni-datetime-picker",
-  "displayName": "uni-datetime-picker 日期选择器",
-  "version": "2.2.35",
-  "description": "uni-datetime-picker 日期时间选择器，支持日历，支持范围选择",
+  "id": "uni-dateformat",
+  "displayName": "uni-dateformat 日期格式化",
+  "version": "1.0.0",
+  "description": "日期格式化组件，可以将日期格式化为1分钟前、刚刚等形式",
   "keywords": [
-    "uni-datetime-picker",
     "uni-ui",
     "uniui",
-    "日期时间选择器",
-    "日期时间"
+    "日期格式化",
+    "时间格式化",
+    "格式化时间",
+    ""
 ],
   "repository": "https://github.com/dcloudio/uni-ui",
   "engines": {
@@ -17,7 +18,11 @@
   "directories": {
     "example": "../../temps/example_temps"
   },
-"dcloudext": {
+  "dcloudext": {
+    "category": [
+      "前端组件",
+      "通用组件"
+    ],
     "sale": {
       "regular": {
         "price": "0.00"
@@ -34,25 +39,20 @@
       "data": "无",
       "permissions": "无"
     },
-    "npmurl": "https://www.npmjs.com/package/@dcloudio/uni-ui",
-    "type": "component-vue"
+    "npmurl": "https://www.npmjs.com/package/@dcloudio/uni-ui"
   },
   "uni_modules": {
-    "dependencies": [
-			"uni-scss",
-			"uni-icons"
-		],
+    "dependencies": ["uni-scss"],
     "encrypt": [],
     "platforms": {
       "cloud": {
         "tcb": "y",
-        "aliyun": "y",
-        "alipay": "n"
+        "aliyun": "y"
       },
       "client": {
         "App": {
           "app-vue": "y",
-          "app-nvue": "n"
+          "app-nvue": "y"
         },
         "H5-mobile": {
           "Safari": "y",
@@ -75,8 +75,8 @@
           "QQ": "y"
         },
         "快应用": {
-          "华为": "u",
-          "联盟": "u"
+          "华为": "y",
+          "联盟": "y"
         },
         "Vue": {
             "vue2": "y",

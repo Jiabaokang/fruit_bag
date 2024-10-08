@@ -1,37 +1,45 @@
 <template>
 	<view class="container">
-		<unicloud-db ref="udb" v-slot:default="{ data, loading, error, options }" :options="options" :collection="collectionList" :getone="true" :manual="true">
+		<unicloud-db
+			ref="udb"
+			v-slot:default="{ data, loading, error, options }"
+			:options="options"
+			:collection="collectionList"
+			field="user_id,score,type,balance,comment,create_date"
+			:where="queryWhere"
+			:getone="true"
+			:manual="true"
+		>
 			<view v-if="error">{{ error.message }}</view>
 			<view v-else-if="loading">
 				<uni-load-more :contentText="loadMore" status="loading"></uni-load-more>
 			</view>
 			<view v-else-if="data">
 				<view>
-					<text>名称：</text>
-					<text>{{ data.title }}</text>
+					<text>user_id</text>
+					<text>{{ data.user_id }}</text>
 				</view>
 				<view>
-					<text>分类：</text>
-					<text>{{ data.navid[0].text }}</text>
+					<text>score</text>
+					<text>{{ data.score }}</text>
 				</view>
 				<view>
-					<view>产品图：</view>
-					<image class="pic" :src="data.picurl.path" mode="aspectFill"></image>
+					<text>type</text>
+					<text>{{ options.type_valuetotext[data.type] }}</text>
 				</view>
 				<view>
-					<text>排序：</text>
-					<text>{{ data.orderid }}</text>
+					<text>balance</text>
+					<text>{{ data.balance }}</text>
 				</view>
 				<view>
-					<text>价格：</text>
-					<text>{{ data.price }}</text>
+					<text>comment</text>
+					<text>{{ data.comment }}</text>
 				</view>
 				<view>
-					<text>状态：</text>
-					<text>{{ data.checked == true?  '✅' : '❌'}}</text>
+					<text>create_date</text>
+					<uni-dateformat :threshold="[0, 0]" :date="data.create_date"></uni-dateformat>
 				</view>
 			</view>
-			
 		</unicloud-db>
 		<view class="btns">
 			<button type="primary" @click="handleUpdate">修改</button>
@@ -42,17 +50,14 @@
 
 <script>
 // 由schema2code生成，包含校验规则和enum静态数据
-import { enumConverter } from '../../js_sdk/validator/fruit-product-list.js';
+import { enumConverter } from '../../js_sdk/validator/uni-id-scores.js';
 const db = uniCloud.database();
 
 export default {
 	data() {
 		return {
 			queryWhere: '',
-			collectionList: [
-				db.collection('fruit-product-list').field('title,navid,picurl,orderid,price,checked').getTemp(),
-				db.collection('fruit-product-nav').field('_id, classname as text').getTemp()
-			],
+			collectionList: 'uni-id-scores',
 			loadMore: {
 				contentdown: '',
 				contentrefresh: '',
@@ -69,14 +74,7 @@ export default {
 	},
 	onReady() {
 		if (this._id) {
-			this.collectionList = [
-				db
-					.collection('fruit-product-list')
-					.where('_id=="' + this._id + '"')
-					.field('title,navid,picurl,orderid,price,checked')
-					.getTemp(),
-				db.collection('fruit-product-nav').field('_id, classname as text').getTemp()
-			];
+			this.queryWhere = '_id=="' + this._id + '"';
 		}
 	},
 	methods: {
@@ -111,12 +109,6 @@ export default {
 <style>
 .container {
 	padding: 10px;
-}
-
-.pic {
-	width: 240rpx;
-	height: 240rpx;
-	border-radius: 12rpx;
 }
 
 .btns {

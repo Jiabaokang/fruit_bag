@@ -1,18 +1,22 @@
 <template>
 	<view class="container">
-		<unicloud-db ref="udb" v-slot:default="{ data, pagination, loading, hasMore, error }" :collection="collectionList">
+		<unicloud-db ref="udb" 
+		v-slot:default="{ data, pagination, loading, hasMore, error }" 
+		:collection="collectionList" 
+		field="user_id,score,type,balance,comment,create_date"
+		>
 			<view v-if="error">{{ error.message }}</view>
 			<view v-else-if="data">
 				<uni-list>
-					<uni-list-item v-for="(item, index) in data" :key="index" showArrow :clickable="true" @click="handleItemClick(item._id)">
-						<template v-slot:body>
-							<text>
-								<!-- 此处默认显示为_id，请根据需要自行修改为其他字段 -->
-								<!-- 如果使用了联表查询，请参考生成的 admin 项目中 list.vue 页面 -->
-								{{ item.title }}
-							</text>
-						</template>
-					</uni-list-item>
+					<uni-list-item
+						v-for="(item, index) in data"
+						:key="index"
+						:title="`积分来源：${item.comment}`"
+						:note="`积分：${item.score}`"
+						showArrow
+						:clickable="true"
+						@click="handleItemClick(item._id)"
+					></uni-list-item>
 				</uni-list>
 			</view>
 			<uni-load-more :status="loading ? 'loading' : hasMore ? 'more' : 'noMore'"></uni-load-more>
@@ -26,10 +30,7 @@ const db = uniCloud.database();
 export default {
 	data() {
 		return {
-			collectionList: [
-				db.collection('fruit-product-list').field('title,navid,picurl,orderid,price,checked').getTemp(),
-				db.collection('fruit-product-nav').field('_id, classname as text').getTemp()
-			],
+			collectionList: 'uni-id-scores',
 			loadMore: {
 				contentdown: '',
 				contentrefresh: '',

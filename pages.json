@@ -17,8 +17,7 @@
 		{
 			"path": "pages/mine/mine",
 			"style": {
-				"navigationBarTitleText": "个人中心",
-				"enablePullDownRefresh": false
+				"navigationStyle": "custom"
 			}
 		},
 		{
@@ -135,22 +134,44 @@
 		}, {
 			"path": "pages/fruit-product-list/add",
 			"style": {
-				"navigationBarTitleText": "新增"
+				"navigationBarTitleText": "新增产品"
 			}
 		}, {
 			"path": "pages/fruit-product-list/edit",
 			"style": {
-				"navigationBarTitleText": "编辑"
+				"navigationBarTitleText": "编辑产品"
 			}
 		}, {
 			"path": "pages/fruit-product-list/list",
 			"style": {
-				"navigationBarTitleText": "列表"
+				"navigationBarTitleText": "产品列表"
 			}
 		}, {
 			"path": "pages/fruit-product-list/detail",
 			"style": {
-				"navigationBarTitleText": "详情"
+				"navigationBarTitleText": "产品详情"
+			}
+		}, {
+			"path": "pages/uni-id-scores/add",
+			"style": {
+				"navigationBarTitleText": "新增"
+			}
+		}, {
+			"path": "pages/uni-id-scores/edit",
+			"style": {
+				"navigationBarTitleText": "编辑"
+			}
+		}, {
+			"path": "pages/uni-id-scores/list",
+			"style": {
+				"navigationBarTitleText": "积分列表",
+				"enablePullDownRefresh": true
+			}
+
+		}, {
+			"path": "pages/uni-id-scores/detail",
+			"style": {
+				"navigationBarTitleText": "积分详情"
 			}
 		}
 	],

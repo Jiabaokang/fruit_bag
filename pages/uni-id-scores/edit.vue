@@ -1,23 +1,23 @@
 <template>
 	<view class="uni-container">
 		<uni-forms ref="form" :model="formData" validate-trigger="submit" err-show-type="toast">
-			<uni-forms-item name="title" label="名称" required>
-				<uni-easyinput placeholder="请输入产品名称" v-model="formData.title"></uni-easyinput>
+			<uni-forms-item name="user_id" label="" required>
+				<uni-easyinput placeholder="用户id，参考uni-id-users表" v-model="formData.user_id"></uni-easyinput>
 			</uni-forms-item>
-			<uni-forms-item name="navid" label="分类" required="">
-				<uni-data-picker v-model="formData.navid" collection="fruit-product-nav" field="_id as value, classname as text"></uni-data-picker>
+			<uni-forms-item name="score" label="" required>
+				<uni-easyinput placeholder="本次变化的积分" type="number" v-model="formData.score"></uni-easyinput>
 			</uni-forms-item>
-			<uni-forms-item name="picurl" label="产品图" required>
-				<uni-file-picker return-type="object" v-model="formData.picurl" :image-styles="imageStyle"></uni-file-picker>
+			<uni-forms-item name="type" label="">
+				<uni-data-checkbox v-model="formData.type" :localdata="formOptions.type_localdata"></uni-data-checkbox>
 			</uni-forms-item>
-			<uni-forms-item name="orderid" label="排序">
-				<uni-easyinput placeholder="请输入序号" type="number" v-model="formData.orderid"></uni-easyinput>
+			<uni-forms-item name="balance" label="" required>
+				<uni-easyinput placeholder="变化后的积分余额" type="number" v-model="formData.balance"></uni-easyinput>
 			</uni-forms-item>
-			<uni-forms-item name="price" label="价格">
-				<uni-easyinput placeholder="如：40RMB/包(1000个)" v-model="formData.price" trim="both"></uni-easyinput>
+			<uni-forms-item name="comment" label="">
+				<uni-easyinput placeholder="备注，说明积分新增、消费的缘由" v-model="formData.comment" trim="both"></uni-easyinput>
 			</uni-forms-item>
-			<uni-forms-item name="checked" label="状态">
-				<uni-data-checkbox v-model="formData.checked" :localdata="formOptions.checked_localdata"></uni-data-checkbox>
+			<uni-forms-item name="create_date" label="">
+				<uni-datetime-picker return-type="timestamp" v-model="formData.create_date"></uni-datetime-picker>
 			</uni-forms-item>
 			<view class="uni-button-group">
 				<button type="primary" class="uni-button" @click="submit">提交</button>
@@ -27,10 +27,10 @@
 </template>
 
 <script>
-import { validator } from '../../js_sdk/validator/fruit-product-list.js';
+import { validator } from '../../js_sdk/validator/uni-id-scores.js';
 
 const db = uniCloud.database();
-const dbCollectionName = 'fruit-product-list';
+const dbCollectionName = 'uni-id-scores';
 
 function getValidator(fields) {
 	let result = {};
@@ -45,39 +45,38 @@ function getValidator(fields) {
 export default {
 	data() {
 		let formData = {
-			title: '',
-			navid: '',
-			picurl: null,
-			orderid: null,
-			price: '',
-			checked: true
+			user_id: '',
+			score: null,
+			type: null,
+			balance: null,
+			comment: '',
+			create_date: null
 		};
 		return {
 			formData,
 			formOptions: {
-				checked_localdata: [
+				type_localdata: [
 					{
-						value: true,
-						text: '显示'
+						value: 1,
+						text: 1
 					},
 					{
-						value: false,
-						text: '隐藏'
+						value: 2,
+						text: 2
 					}
 				]
 			},
 			rules: {
 				...getValidator(Object.keys(formData))
-			},
-			//图标样式
-			imageStyle: {
-				height: 160, 
-				width: 160,
-				border: {
-					radius: '8' 
-				}
 			}
 		};
+	},
+	onLoad(e) {
+		if (e.id) {
+			const id = e.id;
+			this.formDataId = id;
+			this.getDetail(id);
+		}
 	},
 	onReady() {
 		this.$refs.form.setRules(this.rules);
@@ -108,11 +107,12 @@ export default {
 			// 使用 clientDB 提交数据
 			return db
 				.collection(dbCollectionName)
-				.add(value)
+				.doc(this.formDataId)
+				.update(value)
 				.then((res) => {
 					uni.showToast({
 						icon: 'none',
-						title: '新增成功'
+						title: '修改成功'
 					});
 					this.getOpenerEventChannel().emit('refreshData');
 					setTimeout(() => uni.navigateBack(), 500);
@@ -122,6 +122,35 @@ export default {
 						content: err.message || '请求服务失败',
 						showCancel: false
 					});
+				});
+		},
+
+		/**
+		 * 获取表单数据
+		 * @param {Object} id
+		 */
+		getDetail(id) {
+			uni.showLoading({
+				mask: true
+			});
+			db.collection(dbCollectionName)
+				.doc(id)
+				.field('user_id,score,type,balance,comment,create_date')
+				.get()
+				.then((res) => {
+					const data = res.result.data[0];
+					if (data) {
+						this.formData = data;
+					}
+				})
+				.catch((err) => {
+					uni.showModal({
+						content: err.message || '请求服务失败',
+						showCancel: false
+					});
+				})
+				.finally(() => {
+					uni.hideLoading();
 				});
 		}
 	}
@@ -162,6 +191,6 @@ export default {
 }
 
 .uni-button {
-	width: 100%;
+	width: 184px;
 }
 </style>
