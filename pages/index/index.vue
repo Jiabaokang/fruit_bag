@@ -53,8 +53,8 @@ export default {
 				cardsEffect: {
 					perSlideRotate: 15
 				},
-				loop: true,
-				loopedSlides: 2,
+				//loop: true,
+				//loopedSlides: 2,
 				
 			},
 			slideCustomStyle: {
@@ -65,7 +65,7 @@ export default {
 			itemCustomStyle: {
 				overflow: 'hidden',
 				height: '720rpx',
-				width: '560rpx',
+				width: '560rpx', 
 				'border-width': '12rpx',
 				'border-color': '#4fc08d',
 				'border-style': 'solid',
@@ -81,9 +81,14 @@ export default {
 		onChange(swiper, index) {
 			this.currentIndex = index;
 			this.point_card += index;
-			let { _id } = uni.getStorageSync('uni-id-pages-userInfo');
+			let { _id:user_id } = uni.getStorageSync('uni-id-pages-userInfo');
+			let {_id:product_id} = this.productList[this.currentIndex];
+			
 			console.log("swiper="+swiper+"index="+index);
-			dbFruitScore.addScore().then(res=>{
+			dbFruitScore.addScore({
+				user_id,
+				product_id
+			}).then(res=>{
 				console.log(res);
 			})
 		},
@@ -93,13 +98,13 @@ export default {
 				this.productList = res.data;
 			})
 		},
-		goDetail(e){	
+		goDetail(swiper, index){	
 			let {clickedIndex} = e;
+			console.log(clickedIndex);
 			let item = this.productList[clickedIndex];
 			console.log(item);
 			routerTo(`/pages/fruit-product-list/detail?id=${item._id}`);
 		}
-	
 	}
 };
 </script>
@@ -113,7 +118,7 @@ export default {
 }
 
 .info{
-	margin-top: 120rpx;
+	margin-top: 110rpx;
 	font-size: 36rpx;
 	color: #666;
 	display: flex;

@@ -1,24 +1,35 @@
 {
 	"bsonType": "object",
-	"required": ["user_id", "score", "balance"],
-	"permission": {
-		"read": "auth.uid == doc.user_id",
-		"create": "auth.uid != null",
-		"update": false,
-		"delete": false
-	},
+	"required": [
+		"user_id",
+		"score",
+		"balance"
+	],
 	"properties": {
 		"_id": {
 			"description": "ID，系统自动生成"
 		},
 		"user_id": {
 			"bsonType": "string",
-			"description": "用户id，参考uni-id-users表"
+			"description": "用户id，参考uni-id-users表",
+			"foreignKey": "uni-id-users._id"
+		},
+		"product_id": {
+			"bsonType": "string",
+			"description": "产品id，参考fruit-product-list表",
+			"foreignKey": "fruit-product-list._id"
+		},
+		"score": {
+			"bsonType": "int",
+			"description": "本次变化的积分"
 		},
 		
 		"type": {
 			"bsonType": "int",
-			"enum": [1, 2],
+			"enum": [
+				1,
+				2
+			],
 			"description": "积分类型 1:收入 2:支出"
 		},
 		"balance": {
@@ -37,5 +48,6 @@
 				"$env": "now"
 			}
 		}
-	}
+	},
+	"version": "0.0.1"
 }
