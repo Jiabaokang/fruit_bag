@@ -166,7 +166,7 @@ export default {
 		//我的积分
 		onMyScore() {
 			uni.navigateTo({
-				url: '/pages/uni-id-scores/list'
+				url: '/pages/mine/score-list'
 			});
 		},
 		//参加积分抽奖
@@ -245,7 +245,7 @@ export default {
 		height: 320rpx;
 		background: #bbb;
 		padding: 0 30rpx;
-		padding-top: var(--status-bar-height);
+		padding-top: calc(var(--status-bar-height) + 64rpx) ;
 		position: relative;
 		display: flex;
 		align-items: center;
@@ -313,8 +313,8 @@ export default {
 		width: 100%;
 		min-height: 200rpx;
 		background: #fff;
-		border-radius: 30rpx;
-		transform: translateY(-30rpx);
+		border-radius: 36rpx;
+		transform: translateY(-18rpx);
 		padding: 30rpx 0;
 		.info {
 			padding: 10rpx 30rpx;

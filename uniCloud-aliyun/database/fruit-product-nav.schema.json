@@ -3,8 +3,8 @@
 	"bsonType": "object",
 	"required": ["classname","orderid"],
 	"permission": {
-		"read": false,
-		"create": false,
+		"read": true,
+		"create": "auth.uid != null",
 		"update": false,
 		"delete": false
 	},

@@ -5,6 +5,12 @@
 		"score",
 		"balance"
 	],
+	"permission": {
+		"read": true,
+		"create": "auth.uid != null",
+		"update": false,
+		"delete": false
+	},
 	"properties": {
 		"_id": {
 			"description": "ID，系统自动生成"

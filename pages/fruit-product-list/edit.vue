@@ -8,7 +8,7 @@
 				<uni-data-picker v-model="formData.navid" collection="fruit-product-nav" field="_id as value, classname as text"></uni-data-picker>
 			</uni-forms-item>
 			<uni-forms-item name="picurl" label="产品图" required>
-				<uni-file-picker return-type="object" v-model="formData.picurl"></uni-file-picker>
+				<uni-file-picker file-mediatype="all" return-type="object" v-model="formData.picurl"></uni-file-picker>
 			</uni-forms-item>
 			<uni-forms-item name="orderid" label="排序">
 				<uni-easyinput placeholder="请输入序号" type="number" v-model="formData.orderid"></uni-easyinput>

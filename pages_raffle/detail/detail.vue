@@ -34,7 +34,7 @@
 				</view>
 				<view class="group">
 					<view class="pic" v-for="(item,index) in 6" :key="index" :style="{zIndex:6-index}">
-						<image src="../../static/logo.jpg" mode="aspectFill"></image>
+						<image src="../../static/logo.png" mode="aspectFill"></image>
 					</view>
 				</view>
 			</view>
@@ -45,7 +45,7 @@
 				<view class="content">
 					<view class="row" v-for="item in 3">
 						<view class="pic" @click="clickAwardPic">
-							<image src="../../static/logo.jpg" mode="aspectFill"></image>
+							<image src="../../static/logo.png" mode="aspectFill"></image>
 						</view>
 						<view class="text">
 							<view class="name">一等奖（10名）</view>

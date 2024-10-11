@@ -3,7 +3,7 @@
 	"bsonType": "object",
 	"required": ["title","picurl"],
 	"permission": {
-		"read": false,
+		"read": true,
 		"create": false,
 		"update": false,
 		"delete": false

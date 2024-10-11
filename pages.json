@@ -151,27 +151,17 @@
 			"style": {
 				"navigationBarTitleText": "产品详情"
 			}
-		}, {
-			"path": "pages/uni-id-scores/add",
+		},
+		{
+			"path": "pages/mine/score-list",
 			"style": {
-				"navigationBarTitleText": "新增"
+				"navigationBarTitleText": "我的积分"
 			}
-		}, {
-			"path": "pages/uni-id-scores/edit",
+		},
+		{
+			"path": "pages/fruit-detail/fruit-detail",
 			"style": {
-				"navigationBarTitleText": "编辑"
-			}
-		}, {
-			"path": "pages/uni-id-scores/list",
-			"style": {
-				"navigationBarTitleText": "积分列表",
-				"enablePullDownRefresh": true
-			}
-
-		}, {
-			"path": "pages/uni-id-scores/detail",
-			"style": {
-				"navigationBarTitleText": "积分详情"
+				"navigationBarTitleText": "产品详情"
 			}
 		}
 	],
