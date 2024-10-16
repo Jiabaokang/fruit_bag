@@ -1,0 +1,85 @@
+{
+	"bsonType": "object",
+	"required": [
+		
+	],
+	"permission": {
+		"read": true,
+		"create": true,
+		"update": true,
+		"delete": true
+	},
+	"properties": {
+		"_id": {
+			"description": "存储文档 ID（用户 ID），系统自动生成"
+		},
+		"user_id": {
+			"bsonType": "string",
+			"description": "文章作者ID， 参考`uni-id-users` 表",
+			"foreignKey": "uni-id-users._id",
+			"defaultValue": {
+				"$env": "uid"
+			}
+		},
+		"awardList":{
+			"bsonType": "array",
+			"description": "奖项列表"
+		},
+		"roleContent":{
+			"bsonType": "string",
+			"description": "抽奖规则说明"
+		},
+		"isRepeat":{
+			"bsonType": "bool",
+			"description": "是否可以重复抽奖 :false 不能重复，true可以重复",
+			"defaultValue":false
+		},
+		"endTime":{
+			"bsonType": "string",
+			"description": "活动结束时间"
+		},
+		
+		"active_state":{
+			"bsonType": "int",
+			"description": "活动状态：1未开始 2进行中 3已结束",
+			"defaultValue": 1
+		},
+		"isDelete":{
+			"bsonType": "bool",
+			"description": "是否删除：false未删除，true已删除",
+			"defaultValue":false
+		},
+		"view_count": {
+			"bsonType": "int",
+			"title": "阅读数量",
+			"description": "阅读数量",
+			"defaultValue": 100
+		},
+		
+		"join_count": {
+			"bsonType": "int",
+			"title": "参与人数",
+			"description": "参与人数",
+			"defaultValue": 0
+		},
+		
+		"publish_date": {
+			"bsonType": "timestamp",
+			"title": "发表时间",
+			"description": "发表时间",
+			"defaultValue": {
+				"$env": "now"
+			}
+		},
+		"publish_ip": {
+			"bsonType": "string",
+			"title": "发布文章时IP地址",
+			"description": "发表时 IP 地址",
+			"forceDefaultValue": {
+				"$env": "clientIP"
+			}
+		}
+		
+	},
+	"version": "0.0.1"
+}

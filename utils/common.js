@@ -32,3 +32,17 @@ export function showToast({title="",duration=1500,icon="none",mask=false}={}){
 		mask
 	})
 }
+
+//抽奖状态
+export function activeStateTxt(value){
+	if(value ===1){
+		return "未开始";
+	}else if(value ===2){
+		return "进行中";
+	}else if(value ===3){
+		return "已结束";
+	}else{
+		return "未知状态";
+	}
+	
+}

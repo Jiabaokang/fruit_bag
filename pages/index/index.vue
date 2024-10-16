@@ -24,7 +24,7 @@
 		</view>
 	</view>
 </template>
-
+	
 <script>
 import { routerTo } from '../../utils/common.js';
 const db = uniCloud.database();

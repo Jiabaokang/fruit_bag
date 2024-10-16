@@ -41,7 +41,8 @@
 				</view>
 			</view>
 
-			<view class="addBox">
+			<!-- 最大9份 -->
+			<view class="addBox" v-if="awardList.length < 9">
 				<view class="btn" @click="addAwards">添加奖项</view>
 			</view>
 		</view>
@@ -86,8 +87,12 @@
 		uuid
 	} from '../../utils/tools';
 	import {
+		goBack,
 		showToast
 	} from '../../utils/common';
+	
+	const db = uniCloud.database();
+	
 	console.log(dayjs().format('YYYY-MM-DD'));
 
 	const isRepeat = ref(false);
@@ -149,17 +154,22 @@
 		uni.chooseImage({
 			count: 1,
 			success: (res) => {
-				if (res.tempFilePaths.length) {
+				if (res.tempFilePaths.length > 0) {
 					let tempFile = res.tempFilePaths[0];
-					console.log(tempFile);
+					let suffixName
+					// #ifdef MP
+					suffixName = getFileExtension(tempFile)
+					// #endif
+					// #ifdef H5
+					suffixName = getFileExtension(res.tempFiles[0].name)
+					// #endif
 					uni.showLoading({
 						title: '上传中',
 						mask: true
 					});
-					console.log(getFileExtension(tempFile));
 					uniCloud.uploadFile({
 						filePath: tempFile,
-						cloudPath: `raffle/${dayjs().format('YYYYMMDD')}/${uuid()}_${index}.${getFileExtension(tempFile)}`,
+						cloudPath: `raffle/${dayjs().format('YYYYMMDD')}/${uuid()}_${index}.${suffixName}`,
 						cloudPathAsRealPath: true,
 						success: (res) => {
 							awardList.value[index].picurl = res.fileID;
@@ -172,7 +182,7 @@
 					});
 				}
 			}
-		});
+		}); 
 	};
 
 	//改变是否重复中奖
@@ -182,7 +192,7 @@
 	};
 
 	//提交
-	const onSubmit = () => {
+	const onSubmit = async () => {
 		if (!(awardList.value.length && awardList.value.every(item => item.name && item.description))) {
 			showToast({
 				title: "奖项及奖品名称必填",
@@ -203,7 +213,23 @@
 			isRepeat: isRepeat.value,
 			endTime: endTime.value
 		}
-		console.log(fromData);
+		uni.showLoading({
+			title: '提交中',
+			mask: true
+		})
+		try{
+			let {result:{errCode}} = await db.collection("raffle-data").add(fromData)
+			if(errCode === 0){
+				showToast({title:"创建成功"})
+				setTimeout(()=>{
+					goBack()
+				},1000)
+			}else{
+				showToast({title:"创建失败,重新操作",icon:"error"})
+			}
+		}catch(err){
+			showToast({title:err})
+		}
 	};
 </script>
 

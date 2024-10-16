@@ -171,7 +171,7 @@ export default {
 		},
 		//参加积分抽奖
 		toJoinRaffle() {
-			routerTo('/pages_raffle/detail/detail');
+			routerTo('/pages_raffle/list/list');
 		},
 		//分类管理
 		onClassicesManage() {

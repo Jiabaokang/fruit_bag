@@ -43,13 +43,13 @@
 			<view class="item">
 				<view class="title">—— 奖品奖项 ——</view>
 				<view class="content">
-					<view class="row" v-for="item in 3">
-						<view class="pic" @click="clickAwardPic">
-							<image src="../../static/logo.png" mode="aspectFill"></image>
+					<view class="row" v-for="(item,index) in detail.awardList" :key="item.id">
+						<view class="pic" @click="clickAwardPic(index)">
+							<image :src="item.picurl" mode="aspectFill"></image>
 						</view>
 						<view class="text">
-							<view class="name">一等奖（10名）</view>
-							<view class="descrition">iPhone15</view>
+							<view class="name">{{item.name}} ({{item.number}}名）</view>
+							<view class="descrition">{{item.description}}</view>
 						</view>
 					</view>
 				</view>
@@ -58,12 +58,9 @@
 			<view class="item rule">
 				<view class="title">—— 规则说明 ——</view>
 				<view class="content">
-					<!-- <text>
-						1.点击参与报名参加活动；\n
-						2.参与后无需额外操作，等待主办方发起抽奖；\n
-						3.抽奖成功后会将抽奖结果返回，可在右上角点击查看；\n
-						4.将获奖记录给现场工作人员核销后，领取对应的奖品。
-					</text> -->
+					<text>
+						{{detail.roleContent}}
+					</text>
 				</view>
 			</view>
 			
@@ -143,12 +140,21 @@
 import { ref } from "vue";
 import { goBack,routerTo } from "../../utils/common";
 import {getStatusBarHeight,getTitleBarHeight} from "@/utils/system.js"
-
+import {onLoad} from '@dcloudio/uni-app'
+const db = uniCloud.database();
 
 const pagesRoute = ref(getCurrentPages())
 const menuState = ref(true);
 const runPopup = ref(null);
 const resultPopup = ref(null);
+const detail = ref({});
+
+let id;
+
+onLoad((e)=>{
+	id = e.id;
+	getDetail();
+})
 
 
 //点击状态按钮
@@ -159,9 +165,12 @@ const clickStatus = ()=>{
 
 
 //点击奖项图片
-const clickAwardPic = ()=>{
+const clickAwardPic = (index)=>{
+	let urls = detail.value.awardList.map(item=>item.picurl.split("?")[0]);
+	console.log(urls);
 	uni.previewImage({
-		urls:['https://mp-c502f21b-273c-4c6c-be6e-fb2a9f29eed9.cdn.bspapp.com/project/raffleBg.webp']
+		urls,
+		current:index
 	})
 }
 
@@ -173,6 +182,24 @@ const closeMenu = ()=>{
 //关闭反馈弹窗
 const closeResult = ()=>{
 	resultPopup.value.close();
+}
+
+//获取详情
+const getDetail = async ()=>{
+	//let res = await db.collection("raffle-data").where(`_id == "${id}"`).get();
+	let {result:{data:[obj]},errCode} = await db.collection("raffle-data").where(`_id == "${id}"`).get();
+	
+	obj.awardList = obj.awardList.map(item=>{
+		return{
+			...item,
+			picurl:item.picurl?item.picurl+"?x-oss-process=image/resize,w_120,m_lfit":"../../static/prizePic.webp"
+		}
+	});
+	
+	
+	detail.value = obj;
+	
+	console.log(detail.value);
 }
 
 </script>
@@ -369,7 +396,7 @@ const closeResult = ()=>{
 				}
 			}
 		}
-	}
+	} 
 	.footer{
 		min-height: 200rpx;
 		background: url("https://mp-c502f21b-273c-4c6c-be6e-fb2a9f29eed9.cdn.bspapp.com/project/raffle-footer.jpg") no-repeat center top;
@@ -383,8 +410,6 @@ const closeResult = ()=>{
 			opacity: 0.8;
 		}
 	}
-
-
 
 	.menuBar{
 		position: fixed;
