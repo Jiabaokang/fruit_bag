@@ -130,7 +130,7 @@
 				})
 			},
 			quickLogin(e) {
-				let options = {}
+				let options = {uniIdRedirectUrl: this.uniIdRedirectUrl}
 
 				if (e.detail?.code) {
 					options.phoneNumberCode = e.detail.code

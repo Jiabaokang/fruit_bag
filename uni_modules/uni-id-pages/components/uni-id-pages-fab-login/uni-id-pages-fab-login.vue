@@ -441,7 +441,7 @@
 						}
 						this.login(type == 'weixin' ? {
 							code: e.code
-						} : e.authResult, type)
+						} : e.authResult, type,options)
 					},
 					fail: async (err) => {
 						console.log(err);
@@ -449,7 +449,7 @@
 					}
 				})
 			},
-			login(params, type) { //联网验证登录
+			login(params, type,options) { //联网验证登录
 				// console.log('执行登录开始----');
 				console.log({params,type});
 				//toLowerCase
@@ -466,6 +466,7 @@
 					// #ifdef H5
 					result.loginType = type
 					// #endif
+					//mutations.loginSuccess({...result,...options})
 					mutations.loginSuccess(result)
 				})
 				.catch(e=>{

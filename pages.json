@@ -217,7 +217,17 @@
 		"navigationBarBackgroundColor": "#F8F8F8",
 		"backgroundColor": "#F8F8F8"
 	},
-	"uniIdRouter": {},
+	"uniIdRouter": {
+		// #ifdef MP-WEIXIN 
+		"loginPage": "uni_modules/uni-id-pages/pages/login/login-withoutpwd",
+		// #endif 
+		// #ifndef MP-WEIXIN 
+		"loginPage":"uni_modules/uni-id-pages/pages/login/login-withpwd",
+		// #endif 
+		"needLogin": [
+			"pages_raffle/.*"
+		],
+	},
 	"condition": { //模式配置，仅开发期间生效
 		"current": 0, //当前激活的模式(list 的索引项)
 		"list": [{
