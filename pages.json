@@ -28,7 +28,8 @@
 		}, {
 			"path": "uni_modules/uni-id-pages/pages/login/login-withoutpwd",
 			"style": {
-				"navigationBarTitleText": "登录"
+				"navigationBarTitleText": "登录",
+				"navigationBarBackgroundColor": "#fff"
 			}
 		}, {
 			"path": "uni_modules/uni-id-pages/pages/login/login-withpwd",
@@ -180,6 +181,12 @@
 				}
 			},
 			{
+				"path": "detail/join_user",
+				"style": {
+					"navigationBarTitleText": "参与用户"
+				}
+			},
+			{
 				"path": "edit/edit",
 				"style": {
 					"navigationBarTitleText": "创建抽奖"
@@ -221,12 +228,14 @@
 		// #ifdef MP-WEIXIN 
 		"loginPage": "uni_modules/uni-id-pages/pages/login/login-withoutpwd",
 		// #endif 
+
 		// #ifndef MP-WEIXIN 
-		"loginPage":"uni_modules/uni-id-pages/pages/login/login-withpwd",
+		"loginPage": "uni_modules/uni-id-pages/pages/login/login-withpwd",
 		// #endif 
+
 		"needLogin": [
 			"pages_raffle/.*"
-		],
+		]
 	},
 	"condition": { //模式配置，仅开发期间生效
 		"current": 0, //当前激活的模式(list 的索引项)

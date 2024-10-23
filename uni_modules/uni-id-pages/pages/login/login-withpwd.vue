@@ -2,7 +2,7 @@
 <template>
 	<view class="uni-content">
 		<view class="login-logo">
-			<image :src="logo"></image>
+			<image :src="logo" mode="aspectFill"></image>
 		</view>
 		<!-- 顶部文字 -->
 		<text class="title title-box">账号密码登录</text>
@@ -51,7 +51,7 @@
 				"needCaptcha": false,
 				"focusUsername": false,
 				"focusPassword": false,
-				"logo": "/static/logo.png"
+				"logo": "/static/logo_fruit.jpeg"
 			}
 		},
 		onShow() {
@@ -156,6 +156,18 @@
 		}
 	}
 
+	.login-logo{
+		display: block;
+		height: 200rpx;
+		width: 200rpx;
+		margin: 50rpx auto;
+		border-radius: 50%;
+		overflow: hidden;
+		image{
+			width: 100%;
+			height: 100%;
+		}
+	}
 	.forget {
 		font-size: 12px;
 		color: #8a8f8b;

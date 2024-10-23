@@ -1,4 +1,5 @@
 export default {
+
   // 调试模式
   debug: false,
   /*
@@ -6,6 +7,7 @@ export default {
 		如果需要在不同平台有不同的配置，直接用条件编译即可
 	*/
   isAdmin: false, // 区分管理端与用户端
+  logo: '/static/logo_fruit.jpeg', // logo
   loginTypes: [
     // "qq",
     // "xiaomi",

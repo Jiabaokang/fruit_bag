@@ -1,8 +1,10 @@
 <!-- http://localhost:5173/#/pages_raffle/edit/edit  -->
 <template>
-	<view class="editPage">
+	<uni-notice-bar v-if="isStart" show-icon text="活动已开始,不允许修改" background-color="#f5c6c6" color="#fff"/>
+	<view class="editPage" :style="isStart?'pointer-events: none;opacity: 0.5;':''">
 		<uni-notice-bar show-icon text="最多可创建9个奖项,最大支持300人参与" />
 		<view class="award">
+			{{isStart}}
 			<view class="headTitle">—— 奖品奖项 ——</view>
 			<view class="option" v-for="(item, index) in awardList" :key="item.id">
 				<view class="top">
@@ -71,7 +73,7 @@
 				</view>
 			</view>
 			<view class="submitBtn" @click="onSubmit">
-				<button type="primary">确认提交</button>
+				<button type="primary">{{(detail && detail._id)?'确认修改':'确认创建'}}</button>
 			</view>
 		</view>
 	</view>
@@ -79,7 +81,8 @@
 
 <script setup>
 	import {
-		ref
+		ref,
+		computed
 	} from 'vue';
 	import dayjs from 'dayjs';
 	import {
@@ -91,12 +94,48 @@
 		showToast
 	} from '../../utils/common';
 	
-	const db = uniCloud.database();
+	import {onLoad} from '@dcloudio/uni-app'
 	
-	console.log(dayjs().format('YYYY-MM-DD'));
+	const db = uniCloud.database();
+	//详情id
+	let id;
 
 	const isRepeat = ref(false);
 	const endTime = ref(null);
+	const detail = ref({})
+	const isStart = computed(()=>{
+		if(!detail.value._id) return false;
+		if(detail.value?.active_state!=1 || detail.value?.operLogs?.length >0){
+			return true;
+		}else{
+			return false;
+		}
+	})
+	
+	
+	onLoad(async(e)=>{
+		let route = getCurrentPages()[getCurrentPages().length-2].route;
+		if(route.includes('pages_raffle/list/list'))return;
+		
+		id = e.id;
+		if(!id){
+			let confirm = await uni.showModal({
+				title: '参数有误',
+				content: '请正确传递参数',
+				showCancel: false
+			})
+			if (confirm) {
+				goBack();
+				return;
+			}
+		}
+		uni.setNavigationBarTitle({
+			title: '修改抽奖'
+		})
+		getDetail();
+		
+	})
+	
 	//奖品列表
 	const awardList = ref([{
 			name: '一等奖',
@@ -218,9 +257,14 @@
 			mask: true
 		})
 		try{
-			let {result:{errCode}} = await db.collection("raffle-data").add(fromData)
+			let {result:{errCode}} = id?
+			await db.collection("raffle-data").where({_id:id}).update(fromData):
+			await db.collection("raffle-data").add(fromData);
+			console.log(errCode);
+			
+			
 			if(errCode === 0){
-				showToast({title:"创建成功"})
+				showToast({title:id?"修改成功":"创建成功"})
 				setTimeout(()=>{
 					goBack()
 				},1000)
@@ -231,6 +275,28 @@
 			showToast({title:err})
 		}
 	};
+	
+	const getDetail = async () => {
+		try{
+			let {result:{data:[obj],errCode}} = await db.collection("raffle-data").where({_id:id}).get()
+			if(errCode == 0 && obj){
+				console.log(obj); 
+				detail.value = obj;
+				roleContent.value = obj.roleContent;
+				endTime.value = obj.endTime;
+				isRepeat.value = obj.isRepeat;
+				awardList.value = obj.awardList;
+			}else{
+				showToast({title:"获取数据失败"})
+				setTimeout(()=>{
+					goBack()
+				},2000)
+			}
+		}catch(err){
+			showToast({title:err})
+		}
+	}
+	
 </script>
 
 <style lang="scss" scoped>

@@ -21,9 +21,9 @@
 				</view>
 			</view>
 
-			<view class="statusGroup" @click="clickStatus">
-				<template v-if="false">
-					<view v-if="true" class="add btn"> <text>点击\n参与</text> </view>
+			<view class="statusGroup" >
+				<template v-if="!detail.isJoin" >
+					<view class="add btn" @click="handleJoin"> <text>点击\n参与</text> </view>
 				</template>
 				<template v-else>
 					<view v-if="detail.active_state ==1 " class="noStart btn">未开始</view>
@@ -32,7 +32,7 @@
 				</template>
 			</view>
 
-			<view class="count">
+			<view class="count" @click="routerTo('/pages_raffle/detail/join_user')">
 				<view class="text">
 					已有 <text class="big">{{detail.join_count}}</text>人参与
 				</view>
@@ -93,7 +93,8 @@
 					<view class="text">分享抽奖</view>
 				</view>
 
-				<view class="item" hover-class="hoverItem" @click="routerTo(`/pages_raffle/edit/edit`)">
+				<view class="item" hover-class="hoverItem"
+				 @click="routerTo(`/pages_raffle/edit/edit?id=${detail._id}`)">
 					<uni-icons type="gear-filled" size="26"></uni-icons>
 					<view class="text">设置编辑</view>
 				</view>
@@ -146,7 +147,8 @@
 	} from "vue";
 	import {
 		goBack,
-		routerTo
+		routerTo,
+		showToast
 	} from "../../utils/common";
 	import {
 		getStatusBarHeight,
@@ -158,6 +160,8 @@
 	import {store} from "@/uni_modules/uni-id-pages/common/store.js"
 	
 	const db = uniCloud.database();
+	const dbCmd = db.command;
+	const $ = dbCmd.aggregate;
 
 	const pagesRoute = ref(getCurrentPages())
 	const menuState = ref(true);
@@ -210,12 +214,42 @@
 
 	//获取详情
 	const getDetail = async () => {
-		let {
-			result: {
-				data: [obj]
+		//使用聚合查询
+		let {result: {data: [obj]},errCode} = await db.collection("raffle-data").aggregate()
+		.match({
+			_id:id
+		})
+		.lookup({
+			from:"raffle-join-user",
+			let:{
+				raffleID:'$_id'
 			},
-			errCode
-		} = await db.collection("raffle-data").where(`_id == "${id}"`).get();
+			pipeline:$.pipeline().match(
+				dbCmd.expr($.and([
+					$.eq(["$$raffleID","$raffle_id"]),
+					$.eq(["$join_user_id",store.userInfo._id])
+				]))
+			)
+			.count('length')
+			.done(),
+			as:'joinState'
+		})
+		.project({
+			isJoin:$.cond({
+				if:$.gt([$.arrayElemAt(['$joinState',0]),0]),
+				then:true,
+				else:false
+			}),
+			joinState:true,
+			active_state:true,
+			awardList:true,
+			join_count:true,
+			roleContent:true,
+			user_id:true,
+			view_count:true,
+			_id:true
+		})
+		.end();
 
 		obj.awardList = obj.awardList.map(item => {
 			return {
@@ -228,6 +262,33 @@
 		detail.value = obj;
 		console.log(detail.value);
 	}
+	
+	//参与抽奖
+	const handleJoin = async() =>{
+		if(store.hasLogin){
+				try{
+				uni.showLoading({
+					title:"请稍后...",
+					mask:true
+				})
+				let {result:{errCode}} = await db.collection("raffle-join-user").add({
+					raffle_id:id,
+					join_user_id:store.userInfo._id
+				})
+				if(errCode == 0)showToast({title:'参与成功'})
+				//刷新数据
+				getDetail();
+			}catch(err){
+				showToast({title:err})
+				console.log(err);
+			}
+		}else{
+			routerTo("/uni_modules/uni-id-pages/pages/login/login-withoutpwd")
+		}
+	}
+	
+	
+	
 </script>
 
 <style lang="scss" scoped>
@@ -340,12 +401,13 @@
 			.count {
 				position: absolute;
 				top: 1330rpx;
-				width: 100%;
+				width: fit-content;
 				text-align: center;
-
+				left: 0;
+				right: 0;
+				margin: 0 auto;
 				.text {
 					font-size: 34rpx;
-
 					.big {
 						font-weight: bolder;
 					}
