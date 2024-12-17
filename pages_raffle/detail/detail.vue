@@ -32,13 +32,13 @@
 				</template>
 			</view>
 
-			<view class="count" @click="routerTo('/pages_raffle/detail/join_user')">
+			<view class="count" @click="routerTo(`/pages_raffle/detail/join_user?id=${detail._id}`)">
 				<view class="text">
 					已有 <text class="big">{{detail.join_count}}</text>人参与
 				</view>
 				<view class="group">
 					<view class="pic" v-for="(item,index) in 6" :key="index" :style="{zIndex:6-index}">
-						<image src="../../static/logo.png" mode="aspectFill"></image>
+						<image src="/static/logo.png" mode="aspectFill"></image>
 					</view>
 				</view>
 			</view>
@@ -99,7 +99,7 @@
 					<view class="text">设置编辑</view>
 				</view>
 
-				<view class="item" hover-class="hoverItem" @click="routerTo(`/pages_raffle/play/play`)">
+				<view class="item" hover-class="hoverItem" @click="routerTo(`/pages_raffle/play/play?raffleID=${detail._id}`)">
 					<uni-icons type="paperplane-filled" size="26"></uni-icons>
 					<view class="text">抽奖管理</view>
 				</view>

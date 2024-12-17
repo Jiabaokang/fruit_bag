@@ -33,14 +33,14 @@
 
 	//查询抽奖列表
 	const queryList = async (pageNo, pageSize) => {
-		let raffleTemp = db.collection("raffle-data").orderBy("publish_date desc").getTemp();
+		let skip = (pageNo -1) * pageSize;
+		let raffleTemp = db.collection("raffle-data").orderBy("publish_date desc")
+		.skip(skip)
+		.limit(pageSize)
+		.getTemp();
+		
 		let userTemp = db.collection("uni-id-users").field("_id,nickname").getTemp();
-		let {
-			result: {
-				data,
-				errCode
-			}
-		} = await db.collection(raffleTemp, userTemp)
+		let {result: {data,errCode}} = await db.collection(raffleTemp, userTemp)
 			.field("active_state,publish_date,join_count,arrayElemAt(user_id.nickname,0) as nickname,_id")
 			.get();
 		try {

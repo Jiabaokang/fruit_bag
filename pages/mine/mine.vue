@@ -115,6 +115,13 @@
 						</view>
 						<view class="right"><text class="iconfont icon-a-10-you"></text></view>
 					</view>
+					<view class="item" @click="openDoor">
+						<view class="left">
+							<text class="iconfont icon-a-5-xinxi"></text>
+							<text class="text">远程开门</text>
+						</view>
+						<view class="right"><text class="iconfont icon-a-10-you"></text></view>
+					</view>
 				</view>
 
 				<view class="group">
@@ -234,6 +241,23 @@ export default {
 				return true;
 			}
 			return false;
+		},
+		openDoor(){
+			uni.showLoading({
+				mask:true,
+				title:'正在开门'
+			})
+			uniCloud.callFunction({
+				name:"fruit_request_api",
+				data:{"id":"b00064a76050b5de0a5545ee6709a528"},
+			}).then(res=>{
+				console.log(res);
+				uni.hideLoading()
+				uni.showToast({icon:'success',title:'开锁成功'})
+			}).catch(err=>{
+				uni.hideLoading()
+				uni.showToast({icon:'success',title:'开锁失败'})
+			})
 		}
 	}
 };

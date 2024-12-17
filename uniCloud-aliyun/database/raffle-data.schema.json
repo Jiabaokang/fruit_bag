@@ -29,6 +29,11 @@
 			"bsonType": "string",
 			"description": "抽奖规则说明"
 		},
+		"operLogs":{
+			"bsonType": "array",
+			"description": "开奖记录",
+			"defaultValue":[]
+		},
 		"isRepeat":{
 			"bsonType": "bool",
 			"description": "是否可以重复抽奖 :false 不能重复，true可以重复",
