@@ -1,0 +1,7 @@
+{
+  "name": "raffle_operation",
+  "dependencies": {},
+  "extensions": {
+    "uni-cloud-jql": {}
+  }
+}
