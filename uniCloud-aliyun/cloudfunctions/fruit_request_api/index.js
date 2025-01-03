@@ -20,27 +20,44 @@ exports.main = async (event, context) => {
 			
 		// })
 		
-		
-		let url = "https://salto.p2link.483n.com/salto/api/pms/openDoor"
-		let roomName = event.roomNumber;
-		let phoneNumber = event.phoneNumber;
 		const httpclient =  uniCloud.httpclient;
-		const res = await httpclient.request(url, {
-			method: 'GET', 
-			timeout: 60000,
-			data: {
-				"phoneNumber":phoneNumber,
-				"roomName":roomName,
-			},
-			header: {'content-type': 'application/json'},
-			dataType: 'json',
-			
-		})
+		let res = null;
 		
-	
+		let methodName = event.methodName;
+		if (methodName === 'openDoor') {
+			// 调用开门接口
+			let url = "https://salto.p2link.483n.com/salto/api/pms/openDoor"
+			let roomName = event.roomNumber;
+			let phoneNumber = event.phoneNumber;
+			const httpclient =  uniCloud.httpclient;
+			res = await httpclient.request(url, {
+				method: 'GET', 
+				timeout: 60000,
+				data: {
+					"phoneNumber":phoneNumber,
+					"roomName":roomName,
+				},
+				header: {'content-type': 'application/json'},
+				dataType: 'json',
+				
+			})
+		}else{
+			// 调用查询房间信息接口
+			let url = "https://salto.p2link.483n.com/salto/api/pms/getRoomInfo"
+			let phoneNumber = event.phoneNumber;
+			const httpclient =  uniCloud.httpclient;
+			res = await httpclient.request(url, {
+				method: 'GET', 
+				timeout: 50000,
+				data: {
+					"phoneNumber":phoneNumber
+				},
+				header: {'content-type': 'application/json'},
+				dataType: 'json',
+			})
+		}
+
 		console.log(res);
-		// let responseData = res.data;
-		// console.log(responseData.data);
 		return res
 		
 	} catch (error) {
